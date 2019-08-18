@@ -1,9 +1,14 @@
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CalculateValue {
 
     public static PokerCardValue getCardValue(List<String> card) {
-        if (isHasThreeSameKind(card)) {
+        if (isStraight(card)) {
+            return PokerCardValue.STRAIGHT;
+        } else if (isHasThreeSameKind(card)) {
             return PokerCardValue.THREE_OF_A_KIND;
         } else if (isHasManyPair(card)) {
             return PokerCardValue.MANY_PAIR;
@@ -14,10 +19,7 @@ public class CalculateValue {
     }
 
     static Boolean isHasOnePair(List<String> card) {
-        List<Character> cardNumber = new ArrayList<>();
-        for (String temp : card) {
-            cardNumber.add(temp.charAt(0));
-        }
+        List<Integer> cardNumber = getCardNumber(card);
         long count = cardNumber.stream().distinct().count();
         return count != cardNumber.size();
     }
@@ -51,5 +53,29 @@ public class CalculateValue {
             }
         }
         return map;
+    }
+
+    public static boolean isStraight(List<String> card) {
+        if (card.size() != 5) {
+            return false;
+        }
+        List<Integer> cardNumber = getCardNumber(card).stream().sorted().collect(Collectors.toList());
+        int min = cardNumber.get(0);
+        for (int i = 0; i < cardNumber.size(); i++) {
+            if (cardNumber.contains(min)) {
+                min++;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static private List<Integer> getCardNumber(List<String> card) {
+        List<Integer> cardNumber = new ArrayList<>();
+        for (String temp : card) {
+            cardNumber.add((int) (temp.charAt(0)));
+        }
+        return cardNumber;
     }
 }
