@@ -145,4 +145,20 @@ public class PokerHandsTest {
         Player winner = PokerHands.compareCard(card1, card2);
         Assertions.assertEquals(card1, winner.getCard());
     }
+
+    @Test
+    public void should_judge_the_same_level_card_and_return_the_win_player() {
+        List<String> card1 = new ArrayList<String>() {
+            {
+                addAll(Arrays.asList("4H", "5H", "6H", "7H", "8H"));
+            }
+        };
+        List<String> card2 = new ArrayList<String>() {
+            {
+                addAll(Arrays.asList("3H", "4H", "5H", "6H", "7H"));
+            }
+        };
+        Player winner = PokerHands.compareCard(card1, card2);
+        Assertions.assertEquals(card1, winner.getCard());
+    }
 }

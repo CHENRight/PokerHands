@@ -1,3 +1,4 @@
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -102,6 +103,105 @@ public class CalculateValue {
     private static boolean isStraightFlush(List<String> card) {
         return isStraight(card) && isFlush(card);
     }
+
+    public static Player handleSameLevel(Player player1, Player player2) {
+        switch (player1.getCardLevel()) {
+            case 1:
+                return handleSameHighPoint(player1, player2);
+            case 2:
+                return handleSamePair(player1, player2);
+            case 3:
+                return handleSameThreeOfKind(player1, player2);
+            case 4:
+                return handleSameStraight(player1, player2);
+            case 5:
+                //handle Same Flush
+                return player1;
+            case 6:
+                return handleSameFullHouse(player1, player2);
+            case 7:
+                return handleSameFourOfKind(player1, player2);
+            case 8:
+                return handleSameStraightFlush(player1, player2);
+        }
+        return player1;
+    }
+
+    private static Player handleSameHighPoint(Player player1, Player player2) {
+        int sumA = 0, sumB = 0;
+        for (int i = 0; i < 5; i++) {
+            sumA += getCardNumber(player1.getCard()).get(i);
+            sumB += getCardNumber(player2.getCard()).get(i);
+        }
+        return sumA > sumB ? player1 : player2;
+    }
+
+    private static Player handleSamePair(Player player1, Player player2) {
+        List<Integer> countListA = getCardNumber(player1.getCard());
+        List<Integer> countListB = getCardNumber(player2.getCard());
+        int maxPointA = getMaxCount(countListA);
+        int maxPointB = getMaxCount(countListB);
+        if (maxPointA == maxPointB) {
+            return handleSameHighPoint(player1, player2);
+        }
+        return maxPointA > maxPointB ? player1 : player2;
+    }
+
+    private static Player handleSameThreeOfKind(Player player1, Player player2) {
+        return compareMaxPoint(player1.getCard(), player2.getCard()) == 1 ? player1 : player2;
+    }
+
+    private static Player handleSameStraight(Player player1, Player player2) {
+        return compareMaxPoint(player1.getCard(), player2.getCard()) == 1 ? player1 : player2;
+    }
+
+    private static Player handleSameFullHouse(Player player1, Player player2) {
+        return compareMaxPoint(player1.getCard(), player2.getCard()) == 1 ? player1 : player2;
+    }
+
+    private static Player handleSameFourOfKind(Player player1, Player player2) {
+        return compareMaxPoint(player1.getCard(), player2.getCard()) == 1 ? player1 : player2;
+    }
+
+    private static Player handleSameStraightFlush(Player player1, Player player2) {
+        return compareMaxPoint(player1.getCard(), player2.getCard()) == 1 ? player1 : player2;
+    }
+
+    private static int compareMaxPoint(List<String> player1Card, List<String> player2Card) {
+        List<Integer> countListA = getCardNumber(player1Card);
+        List<Integer> countListB = getCardNumber(player2Card);
+        int maxPointA = getMaxCount(countListA);
+        int maxPointB = getMaxCount(countListB);
+        return maxPointA > maxPointB ? 1 : 2;
+    }
+
+
+    private static int getMaxCount(List<Integer> countList) {
+        HashMap<Integer, Integer> map = getCountTimesMap(countList);
+        Collection<Integer> count = map.values();
+        int maxCount = Collections.max(count);
+        int maxNumber = 0;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (maxCount == entry.getValue()) {
+                maxNumber = entry.getKey() > maxNumber ? entry.getKey() : maxNumber;
+            }
+        }
+        return maxNumber;
+    }
+
+    private static HashMap<Integer, Integer> getCountTimesMap(List<Integer> countList) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < countList.size(); i++) {
+            if (map.containsKey(countList.get(i))) {
+                int temp = map.get(countList.get(i));
+                map.put(countList.get(i), temp + 1);
+            } else {
+                map.put(countList.get(i), 1);
+            }
+        }
+        return map;
+    }
+
 
     static private List<Integer> getCardNumber(List<String> card) {
         List<Integer> cardNumber = new ArrayList<>();
