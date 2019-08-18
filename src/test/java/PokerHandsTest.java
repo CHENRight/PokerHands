@@ -81,4 +81,20 @@ public class PokerHandsTest {
         Player winner = PokerHands.compareCard(card1, card2);
         Assertions.assertEquals(card1, winner.getCard());
     }
+
+    @Test
+    public void should_player_win_with_card_is_flush() {
+        List<String> card1 = new ArrayList<String>() {
+            {
+                addAll(Arrays.asList("2H", "3H", "5H", "7H", "9H"));
+            }
+        };
+        List<String> card2 = new ArrayList<String>() {
+            {
+                addAll(Arrays.asList("1C", "2H", "3S", "4D", "5C"));
+            }
+        };
+        Player winner = PokerHands.compareCard(card1, card2);
+        Assertions.assertEquals(card1, winner.getCard());
+    }
 }

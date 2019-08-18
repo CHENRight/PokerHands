@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 public class CalculateValue {
 
     public static PokerCardValue getCardValue(List<String> card) {
-        if (isStraight(card)) {
+        if (isFlush(card)) {
+            return PokerCardValue.FLUSH;
+        } else if (isStraight(card)) {
             return PokerCardValue.STRAIGHT;
         } else if (isHasThreeSameKind(card)) {
             return PokerCardValue.THREE_OF_A_KIND;
@@ -71,10 +73,25 @@ public class CalculateValue {
         return true;
     }
 
+    public static boolean isFlush(List<String> card) {
+        List<Character> cardColor = getCardColor(card);
+        Set<Character> set = new HashSet<>(cardColor);
+        return set.size() == 1 && cardColor.size() == 5;
+    }
+
+
     static private List<Integer> getCardNumber(List<String> card) {
         List<Integer> cardNumber = new ArrayList<>();
         for (String temp : card) {
             cardNumber.add((int) (temp.charAt(0)));
+        }
+        return cardNumber;
+    }
+
+    static private List<Character> getCardColor(List<String> card) {
+        List<Character> cardNumber = new ArrayList<>();
+        for (String temp : card) {
+            cardNumber.add((temp.charAt(1)));
         }
         return cardNumber;
     }
