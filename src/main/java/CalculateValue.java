@@ -1,12 +1,12 @@
-import org.omg.PortableInterceptor.INACTIVE;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CalculateValue {
 
     public static PokerCardValue getCardValue(List<String> card) {
-        if (isFourOfKind(card)) {
+        if (isStraightFlush(card)) {
+            return PokerCardValue.STRAIGHT_FLUSH;
+        } else if (isFourOfKind(card)) {
             return PokerCardValue.FOUR_OF_A_KIND;
         } else if (isFullHouse(card)) {
             return PokerCardValue.FULL_HOUSE;
@@ -97,6 +97,10 @@ public class CalculateValue {
             }
         }
         return false;
+    }
+
+    private static boolean isStraightFlush(List<String> card) {
+        return isStraight(card) && isFlush(card);
     }
 
     static private List<Integer> getCardNumber(List<String> card) {
