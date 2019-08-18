@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 public class CalculateValue {
 
     public static PokerCardValue getCardValue(List<String> card) {
-        if (isFlush(card)) {
+        if (isFullHouse(card)) {
+            return PokerCardValue.FULL_HOUSE;
+        } else if (isFlush(card)) {
             return PokerCardValue.FLUSH;
         } else if (isStraight(card)) {
             return PokerCardValue.STRAIGHT;
@@ -77,6 +79,12 @@ public class CalculateValue {
         List<Character> cardColor = getCardColor(card);
         Set<Character> set = new HashSet<>(cardColor);
         return set.size() == 1 && cardColor.size() == 5;
+    }
+
+    public static boolean isFullHouse(List<String> card) {
+        List<Integer> cardNumber = getCardNumber(card);
+        Set<Integer> set = new HashSet<>(cardNumber);
+        return set.size() == 2 && cardNumber.size() == 5;
     }
 
 
