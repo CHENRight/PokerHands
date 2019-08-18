@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 public class CalculateValue {
 
     public static PokerCardValue getCardValue(List<String> card) {
-        if (isFullHouse(card)) {
+        if (isFourOfKind(card)) {
+            return PokerCardValue.FOUR_OF_A_KIND;
+        } else if (isFullHouse(card)) {
             return PokerCardValue.FULL_HOUSE;
         } else if (isFlush(card)) {
             return PokerCardValue.FLUSH;
@@ -87,6 +89,15 @@ public class CalculateValue {
         return set.size() == 2 && cardNumber.size() == 5;
     }
 
+    private static boolean isFourOfKind(List<String> card) {
+        HashMap<Character, Integer> map = getSingleCardCount(card);
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > 3) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     static private List<Integer> getCardNumber(List<String> card) {
         List<Integer> cardNumber = new ArrayList<>();
